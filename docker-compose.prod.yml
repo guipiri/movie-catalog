@@ -1,0 +1,31 @@
+name: movie-catalog-prod
+
+services:
+  db:
+    image: postgres
+    container_name: db-prod
+    environment:
+      POSTGRES_DB: movie_catalog
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./pgdata-prod:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis
+    container_name: redis-prod
+    ports:
+      - '6379:6379'
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.prod
+    container_name: app-prod
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+      - redis

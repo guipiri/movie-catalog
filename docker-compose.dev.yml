@@ -1,0 +1,33 @@
+name: movie-catalog-dev
+
+services:
+  db:
+    image: postgres
+    container_name: db-dev
+    environment:
+      POSTGRES_DB: movie_catalog
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./pgdata-dev:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis
+    container_name: redis-dev
+    ports:
+      - '6379:6379'
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    container_name: app-dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./src:/usr/src/app/src
+    depends_on:
+      - db
+      - redis

@@ -2,6 +2,8 @@
 /dist
 /node_modules
 /build
+/pgdata-prod
+/pgdata-dev
 
 # Logs
 logs
@@ -41,6 +43,8 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 .env.local
+.env.dev
+.env.prod
 
 # temp directory
 .temp
