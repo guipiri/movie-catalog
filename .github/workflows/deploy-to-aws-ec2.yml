@@ -8,14 +8,25 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: copy file via ssh password
+      - name: Check repo files
+        uses: actions/checkout@v4
+      - name: Copy files via ssh key
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          # password: ${{ secrets.PASSWORD }}
           key: ${{secrets.SSH_PRVATE_KEY}}
           port: ${{ secrets.PORT }}
           source: '.'
           target: '/home/ubuntu/movie-catalog-api'
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{secrets.SSH_PRVATE_KEY}}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/ubuntu/movie-catalog-api
+            npm install
+            npm run prod

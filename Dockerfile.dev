@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN rm .env.dev && rm .env.prod
-
 RUN npm install
 
 EXPOSE 3000
