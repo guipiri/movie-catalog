@@ -4,19 +4,18 @@ on:
     branches: [main]
 
 jobs:
-  EC2-Deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    environment:
-      name: 'EC2'
-      url: 'ec2-3-15-33-141.us-east-2.compute.amazonaws.com'
     steps:
-      - id: deploy
-        uses: bitovi/github-actions-deploy-docker-to-ec2@v1.0.1
+      - uses: actions/checkout@v4
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_default_region: us-east-2
-          aws_elb_app_port: 3000 # This should match the docker exposed port. Defaults to 3000.
-          aws_ec2_instance_create: false
-          aws_vpc_id: 'vpc-0eb7b2fb6bdac82cb'
-          aws_vpc_subnet_id: 'subnet-08e0bb048d08adf73'
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{secrets.SSH_PRVATE_KEY}}
+          port: ${{ secrets.PORT }}
+          source: '.'
+          target: '/home/ubuntu/movie-catalog-api'
