@@ -15,7 +15,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           # password: ${{ secrets.PASSWORD }}
-          key: ${{secrets.SSH_PRVATE_KEY}}
+          key_path: '/home/xuxa/.ssh/movie-catalog-ssh-rsa.pem'
           port: ${{ secrets.PORT }}
           source: '.'
           target: '/home/ubuntu/movie-catalog-api'
