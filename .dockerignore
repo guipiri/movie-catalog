@@ -20,8 +20,8 @@ README.md
 
 docker-compose.dev.yml
 
-docker-compose.prod.yml
+docker-compose.yml
 
 Dockerfile.dev
 
-Dockerfile.prod
+Dockerfile

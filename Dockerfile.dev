@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-COPY .env.dev ./.env
-
 RUN rm .env.dev && rm .env.prod
 
 RUN npm install
