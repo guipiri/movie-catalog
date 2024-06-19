@@ -14,7 +14,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly configService: ConfigService,
   ) {
-    this.expiresIn = configService.get<number>('JWT_EXPIRATION_SECONDS');
+    this.expiresIn = this.configService.get<number>('JWT_EXPIRATION_SECONDS');
   }
 
   async signIn({ username, password }: UserDto): Promise<AuthDto> {
