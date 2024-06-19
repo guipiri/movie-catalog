@@ -7,20 +7,17 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiTags,
-  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { AuthDecorators } from 'src/auth/auth.decorator';
 import {
   SWAGGER_DES_MALFORMED_REQUEST,
   SWAGGER_DES_MOVIE_CREATED,
-  SWAGGER_DES_UNAUTHORIZED,
 } from 'src/constants';
-import { JwtAuthGuard } from '../auth/auth.guard';
 import { CreateMovieDto, UpdateMovieDto } from './movie.dto';
 import { Movie } from './movie.entity';
 import { MovieService } from './movie.service';
@@ -28,9 +25,8 @@ import { MovieService } from './movie.service';
 @ApiBadRequestResponse({
   description: SWAGGER_DES_MALFORMED_REQUEST,
 })
-@ApiUnauthorizedResponse({ description: SWAGGER_DES_UNAUTHORIZED })
+@AuthDecorators()
 @ApiTags('Movie')
-@UseGuards(JwtAuthGuard)
 @Controller('movie')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
