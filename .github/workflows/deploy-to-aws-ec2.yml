@@ -28,5 +28,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/ubuntu/movie-catalog-api
-            npm install
             npm run prod
