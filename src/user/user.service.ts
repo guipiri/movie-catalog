@@ -1,17 +1,11 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashSync as bcryptHashSync } from 'bcrypt';
-import { isUUID } from 'class-validator';
-import {
-  MALFORMED_UUID,
-  USER_ALREADY_EXISTS,
-  USER_NOT_FOUND,
-} from 'src/constants';
+import { USER_ALREADY_EXISTS, USER_NOT_FOUND } from 'src/constants';
 import { Repository } from 'typeorm';
 import { UpdateUserDto, UserDto } from './user.dto';
 import { User } from './user.entity';
@@ -35,29 +29,29 @@ export class UserService {
   }
 
   async create({ username, password }: UserDto): Promise<User> {
-    const newUser = this.userRepository.create({
+    const usernameExists = await this.userRepository.existsBy({ username });
+    if (usernameExists) throw new ConflictException(USER_ALREADY_EXISTS);
+
+    return await this.userRepository.save({
       username,
       password: bcryptHashSync(password, 10),
     });
-    try {
-      return await this.userRepository.save(newUser);
-    } catch (error) {
-      if (error.code === '23505') {
-        throw new ConflictException(`${USER_ALREADY_EXISTS} ${username}`);
-      }
-    }
   }
 
-  async update(id: string, user: UpdateUserDto): Promise<void> {
-    if (!isUUID(id)) {
-      throw new BadRequestException(MALFORMED_UUID);
-    }
+  async update(
+    id: string,
+    { username, password }: UpdateUserDto,
+  ): Promise<void> {
+    const usernameExists = await this.userRepository.existsBy({ username });
+    if (usernameExists) throw new ConflictException(USER_ALREADY_EXISTS);
 
-    const { affected } = await this.userRepository.update(id, user);
+    const { affected } = await this.userRepository.update(id, {
+      username,
+      password: bcryptHashSync(password, 10),
+    });
     if (!affected) {
       throw new NotFoundException(`${USER_NOT_FOUND} ${id}`);
     }
-    return;
   }
 
   async remove(id: string): Promise<void> {

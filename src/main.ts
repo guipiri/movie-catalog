@@ -10,6 +10,9 @@ async function bootstrap() {
     .setTitle('Movie Catalog')
     .setDescription('The movie catalog API description')
     .setVersion('1.0')
+    .addTag('Start here!')
+    .addTag('User')
+    .addTag('Auth')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);

@@ -1,10 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isUUID } from 'class-validator';
+import { MOVIE_NOT_FOUND } from 'src/constants';
 import { Repository } from 'typeorm';
 import { CreateMovieDto, UpdateMovieDto } from './movie.dto';
 import { Movie } from './movie.entity';
@@ -21,12 +17,9 @@ export class MovieService {
   }
 
   async findOne(id: string): Promise<Movie> {
-    if (!isUUID(id)) {
-      throw new BadRequestException('Malformed uuid');
-    }
     const movie = await this.moviesRepository.findOneBy({ id });
     if (!movie) {
-      throw new NotFoundException(`Movie with id ${id} not found`);
+      throw new NotFoundException(`${MOVIE_NOT_FOUND} ${id}`);
     }
     return movie;
   }
@@ -36,24 +29,16 @@ export class MovieService {
   }
 
   async update(id: string, movie: UpdateMovieDto): Promise<void> {
-    if (!isUUID(id)) {
-      throw new BadRequestException('Malformed uuid');
-    }
-
     const { affected } = await this.moviesRepository.update(id, movie);
     if (!affected) {
-      throw new NotFoundException(`Movie with id ${id} not found`);
+      throw new NotFoundException(`${MOVIE_NOT_FOUND} ${id}`);
     }
   }
 
-  async remove(id: string): Promise<any> {
-    if (!isUUID(id)) {
-      throw new BadRequestException('Malformed uuid');
-    }
-
+  async remove(id: string): Promise<void> {
     const { affected } = await this.moviesRepository.delete(id);
     if (!affected) {
-      throw new NotFoundException(`Movie with id ${id} not found`);
+      throw new NotFoundException(`${MOVIE_NOT_FOUND} ${id}`);
     }
   }
 }

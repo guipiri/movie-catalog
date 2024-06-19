@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthDecorators } from 'src/auth/auth.decorator';
 import {
-  SWAGGER_DES_MALFORMED_REQUEST,
+  SWAGGER_DES_BAD_REQUEST,
   SWAGGER_DES_USER_CREATED,
   SWAGGER_DES_USER_DELETED,
   SWAGGER_DES_USER_GOTTEN,
@@ -28,7 +28,7 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @ApiBadRequestResponse({
-  description: SWAGGER_DES_MALFORMED_REQUEST,
+  description: SWAGGER_DES_BAD_REQUEST,
 })
 @ApiTags('User')
 @Controller('user')
