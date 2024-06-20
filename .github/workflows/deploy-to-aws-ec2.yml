@@ -29,3 +29,4 @@ jobs:
           script: |
             cd /home/ubuntu/movie-catalog-api
             npm run prod
+            rm -rf 
